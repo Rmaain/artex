@@ -24,7 +24,6 @@ int main(){
     double xfactor = static_cast<double>(xscreenPixel) / consolesize.first;
     double yfactor = static_cast<double>(ycreenPixel) / consolesize.second;
 
-    bool pastClicked = false;
     while(1){
         POINT userCursor;
         
@@ -40,7 +39,6 @@ int main(){
                 GetCursorPos(&userCursor);
                 setPosition((int)(userCursor.x/xfactor), (int)(userCursor.y/yfactor));
                 std::cout << ".";
-                pastClicked = true;
                 matrixConsole[(int)(userCursor.x/xfactor)][(int)(userCursor.y/yfactor)] = 1;
           }
 
@@ -51,7 +49,6 @@ int main(){
         }
         Sleep(10);
     }
-    
 
     return 0;
 }
