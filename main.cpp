@@ -1,10 +1,12 @@
 #include <iostream>
 #include <windows.h>
+#include <vector>
 
 void setPosition(int x, int y){
     COORD coord = {(SHORT)x, (SHORT)y};
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
+
 std::pair<int, int> ConsoleSize(){
     CONSOLE_SCREEN_BUFFER_INFO info;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
@@ -13,6 +15,7 @@ std::pair<int, int> ConsoleSize(){
 
 int main(){
     std::pair<int, int> consolesize = ConsoleSize();
+    std::vector<std::vector<int>> matrixConsole(consolesize.first+1, std::vector<int>(consolesize.second+1, 0));
 
     int xscreenPixel = GetSystemMetrics(SM_CXSCREEN);
     int ycreenPixel = GetSystemMetrics(SM_CYSCREEN);
@@ -24,26 +27,29 @@ int main(){
     bool pastClicked = false;
     while(1){
         POINT userCursor;
+        
         GetCursorPos(&userCursor);
         int auxx = (int)(userCursor.x/xfactor);
         int auxy = (int)(userCursor.y/yfactor);
         setPosition((int)(userCursor.x/xfactor), (int)(userCursor.y/yfactor));
-        std::cout << ".";
+        if(matrixConsole[auxx][auxy] != 1){
+            std::cout << " ";
+        }
         if ((GetAsyncKeyState(0x01) & 0x8000)){
-            // if(!pastClicked){
+
                 GetCursorPos(&userCursor);
                 setPosition((int)(userCursor.x/xfactor), (int)(userCursor.y/yfactor));
-                std::cout << "x";
-            //     pastClicked = true;
-            // }
-         }
-        // else{
-        //     pastClicked = false;
-        // }
+                std::cout << ".";
+                pastClicked = true;
+                matrixConsole[(int)(userCursor.x/xfactor)][(int)(userCursor.y/yfactor)] = 1;
+          }
+
+        if(matrixConsole[auxx][auxy] != 1){
         setPosition(auxx, auxy);
         std::cout << " ";
+       
+        }
         Sleep(10);
-
     }
     
 
